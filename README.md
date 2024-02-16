@@ -22,5 +22,3 @@ contains db variable that has value of SQLAlchemy as the toolkit for fobject rat
 - POST method is used to create new data or resources.
 - PUT method is used to replace or updating an existing data or resources with the updated version data or resources.
 - DELETE method is used to remove data from a database.
-
-- SQLAlqhemy : for object relational mapper (python SQL toolkit); poetry add flask-SQLAlchemy
