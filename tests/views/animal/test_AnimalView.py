@@ -40,7 +40,7 @@ def test_update_animal(test_app, mocker):
 
 def test_deleted_animal(test_app, mocker):
     # arrange
-    expected_response = "Animal doesn't exist"
+    expected_response = "Animal is deleted"
     mocker.patch.object(AnimalsView, 'delete', return_value=expected_response)
     
     # act
