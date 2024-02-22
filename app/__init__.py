@@ -7,7 +7,6 @@ from app.views.animal.AnimalView import blp as AnimalView
 from app.views.employee.EmployeesView import blp as EmployeesView
 from app.views.employee.EmployeeView import blp as EmployeeView
 
-
 def create_app(db_url=None):
     app = Flask(__name__)
     app.config["API_TITLE"] = "Stores REST API"
@@ -25,8 +24,6 @@ def create_app(db_url=None):
     with app.app_context():
         db.create_all()
     api = Api(app)
-
-
 
     api.register_blueprint(AnimalsView)
     api.register_blueprint(AnimalView)
