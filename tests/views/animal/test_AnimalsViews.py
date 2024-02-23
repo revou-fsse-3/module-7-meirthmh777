@@ -39,6 +39,9 @@ def test_create_animals(test_app, mocker):
         post_new_animal = AnimalsView().post(create_new_animal)
 
     # assert
+    assert post_new_animal["name"] == "kitty"
+    assert post_new_animal["age"] == 8
+
     # expected_response = {
     #     "name" : "kitty",
     #     "age" : 8,
@@ -46,5 +49,3 @@ def test_create_animals(test_app, mocker):
     #     "species" : "mammals",
     #     "special_requirements" : "medication"
     # }
-    assert post_new_animal["name"] == "kitty"
-    assert post_new_animal["age"] == 8
