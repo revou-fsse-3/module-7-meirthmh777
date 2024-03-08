@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="styles.css" /> -->
+    <title>Zoo Yeaaahhhh</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: center;
+        font-family: "Poppins", sans-serif;
+      }
+      h2 {
+        font-family: "Poppins", sans-serif;
+      }
+      h3 {
+        font-family: "Poppins", sans-serif;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+        font-family: "Poppins", sans-serif;
+      }
+      th {
+        background-color: #f2f2f2;
+        text-align: center;
+        font-family: "Poppins", sans-serif;
+      }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      button {
+        padding: 10px 20px;
+        cursor: pointer;
+        text-align: center;
+        font-family: "Poppins", sans-serif;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+      }
+      button:hover {
+        background-color: #555;
+      }
+
+      .search-container {
+        margin-top: 20px;
+      }
+
+      .search-input {
+        padding: 10px;
+        width: 300px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .search-button {
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-family: "Poppins", sans-serif;
+      }
+      /* navbar */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-right: 10px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .navbar p {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+      }
+
+      /* Add section styling */
+      #newanimalForm {
+        display: none;
+        padding: 20px;
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        margin-top: 20px;
+        width: 500px;
+        margin-left: 10px;
+      }
+
+      #newanimalForm label {
+        font-weight: bold;
+        font-size: 16px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      #newanimalForm input[type="text"],
+      #newanimalForm input[type="number"] {
+        padding: 10px;
+        width: 250px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      #newanimalForm button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      #newanimalForm button:hover {
+        background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div>
+        <a href="{{ url_for('animal_routes.animal_home') }}">Animal Page</a>
+        <a href="{{ url_for('employee_routes.employee_home') }}"
+          >Employee Page</a
+        >
+      </div>
+      <p>Hello, {{response_data['name']}}. Welcome to Zoo App!</p>
+      <div>
+        <a href="/logout">Logout</a>
+      </div>
+    </div>
+
+    <h2>Animals Page</h2>
+
+    <div class="search-container">
+      <input
+        type="text"
+        class="search-input"
+        id="searchInput"
+        placeholder="Search..."
+      />
+      <button class="search-button" onclick="search()">Search Animal</button>
+    </div>
+    <hr style="border: none" />
+    <!-- table animal list -->
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Species</th>
+          <th>Special Requierements</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for animal in response_data['animals']%}
+        <tr>
+          <td>{{ animal.id }}</td>
+          <td id="name_{{ animal.id }}">{{ animal.name }}</td>
+          <td id="age_{{ animal.id }}">{{animal.age}}</td>
+          <td id="gender_{{ animal.id }}">{{animal.gender}}</td>
+          <td id="species_{{ animal.id }}">{{animal.species}}</td>
+          <td id="requirements_{{ animal.id }}">
+            {{animal.special_requirements}}
+          </td>
+          <td>
+            <button onclick="openEditanimalForm(this)" id="edit_{{animal.id}}">
+              Edit
+            </button>
+            <button onclick="deleteanimal(this)" id="delete_{{ animal.id }}">
+              Delete
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+        <!-- Add more <tr> elements for additional products -->
+      </tbody>
+    </table>
+    <br />
+    <!-- add new animal -->
+    <button onclick="openNewanimalForm()">Add New Animal</button>
+    <div id="newanimalForm" style="display: none">
+      <h3 id="formSection">Add New Animal</h3>
+      <form id="formanimal" class="form-group">
+        <label for="animalName">Name:</label>
+        <input
+          type="text"
+          name="animalName"
+          id="animalName"
+          required
+        /><br /><br />
+
+        <label for="animalage">Age:</label>
+        <input
+          type="number"
+          name="animalage"
+          id="animalage"
+          required
+        /><br /><br />
+
+        <label for="animalgender">Gender:</label>
+        <input
+          type="text"
+          name="animalgender"
+          id="animalgender"
+          required
+        /><br /><br />
+        <label for="animalspecies">Species:</label>
+        <input
+          type="text"
+          name="animalspecies"
+          id="animalspecies"
+          required
+        /><br /><br />
+        <label for="animalRequirements">Special Requirements:</label>
+        <input
+          type="text"
+          name="animalRequirements"
+          id="animalRequirements"
+          required
+        /><br /><br />
+        <div class="button">
+          <button type="button" onclick="submitForm()">Add</button>
+          <button type="button" onclick="closeNewanimalForm()">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <script src="index.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script>
+      console.log("testing connect");
+      var form_url = "";
+      var form_method = "";
+      var base_url = "{{ url_for('animal_routes.animal_home') }}";
+      // add new animal
+      function openNewanimalForm() {
+        form_method = "POST";
+        form_url = base_url;
+        document.getElementById("newanimalForm").style.display = "block";
+        document.getElementById("formSection").innerHTML = "Add New Animal";
+        document.getElementById("formanimal").reset();
+      }
+
+      function openEditanimalForm(button) {
+        var selected_animal_id = button.id.split("_")[1];
+        form_method = "PUT";
+        form_url = base_url + "/" + selected_animal_id;
+
+        var name = $("#name_" + selected_animal_id).html();
+        var age = $("#age_" + selected_animal_id).html();
+        var gender = $("#gender_" + selected_animal_id).html();
+        var species = $("#species_" + selected_animal_id).html();
+        var special_requirements = $(
+          "#requirements_" + selected_animal_id
+        ).html();
+
+        $("#animalName").val(name);
+        $("#animalage").val(age);
+        $("#animalgender").val(gender);
+        $("#animalspecies").val(species);
+        $("#animalRequirements").val(special_requirements);
+
+        document.getElementById("newanimalForm").style.display = "block";
+        document.getElementById("formSection").innerHTML = "Edit Animal";
+      }
+
+      function closeNewanimalForm() {
+        document.getElementById("newanimalForm").style.display = "none";
+      }
+
+      function submitForm() {
+        var request_data = {
+          name: $("#animalName").val(),
+          age: $("#animalage").val(),
+          gender: $("#animalgender").val(),
+          species: $("#animalspecies").val(),
+          special_requirements: $("#animalRequirements").val(),
+        };
+
+        $.ajax({
+          url: form_url,
+          data: request_data,
+          method: form_method,
+        }).done(function (response) {
+          alert(response.message);
+          location.reload();
+        });
+      }
+      // delete animal by it's id
+      function deleteanimal(button) {
+        var selected_animal_id = button.id.split("_")[1];
+        var delete_url = base_url + "/" + selected_animal_id;
+
+        $.ajax({
+          url: delete_url,
+          method: "DELETE",
+        }).done(function (response) {
+          alert(response.message);
+          location.reload();
+        });
+      }
+      // search animal
+      function search() {
+        window.location = base_url + "?query=" + $("#searchInput").val();
+      }
+    </script>
+  </body>
+</html>

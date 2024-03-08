@@ -1,15 +1,19 @@
 from app.utils.db import db
+from app.model.base import Base
+from sqlalchemy.orm import mapped_column
+from sqlalchemy import Integer, String, Text
 
 class AnimalModel(db.Model):
-    __tablename__ = "animals"
+    __tablename__ = "animal_table"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    age = db.Column(db.Integer)
-    gender = db.Column(db.String)
-    species = db.Column(db.String)
-    special_requirements = db.Column(db.String)
-
+    id = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name = mapped_column(String(100), nullable=False)
+    age = mapped_column(Integer, nullable=False)
+    gender = mapped_column(String(100), nullable=False)
+    species = mapped_column(String(100), nullable=False)
+    special_requirements = mapped_column(Text, nullable=False)
+    def __repr__(self):
+        return f'<Animal {self.name}>'
     
     def __init__(self, name:str, age:int, gender:str, species:str, special_requirements:str ):
         self.name = name
