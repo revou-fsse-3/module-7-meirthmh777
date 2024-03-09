@@ -6,7 +6,7 @@ import bcrypt
 from flask_login import UserMixin
 
 class Registration(db.Model, UserMixin):
-    __tablename__='employee_register_table'
+    __tablename__='registration'
     id = mapped_column(Integer, primary_key=True, autoincrement=True)
     name = mapped_column(String(100), nullable=False)
     email = mapped_column(String(100), nullable=False)
